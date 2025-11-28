@@ -3,6 +3,7 @@ import boto3
 import pandas as pd
 from io import BytesIO
 from datetime import datetime
+from urllib.parse import unquote_plus
 
 s3 = boto3.client('s3')
 
@@ -10,11 +11,12 @@ def lambda_handler(event, context):
     try:
         # Get S3 event details
         bucket = event['Records'][0]['s3']['bucket']['name']
-        key = event['Records'][0]['s3']['object']['key']
+        # IMPORTANT: Decode the URL-encoded key
+        key = unquote_plus(event['Records'][0]['s3']['object']['key'])
         
-        print(f"processing s3://{bucket}/{key}")
+        print(f"Processing: s3://{bucket}/{key}")
         
-        # Read JSON
+        # Read JSON from S3
         response = s3.get_object(Bucket=bucket, Key=key)
         data = json.loads(response['Body'].read().decode('utf-8'))
         
@@ -33,17 +35,17 @@ def lambda_handler(event, context):
         df['discount'] = 0.0
         df['final_amount'] = df['total_amount'] - df['discount']
         
-        #Data validation
+        # Data validation
         if df['quantity'].iloc[0] <= 0:
             raise ValueError("Invalid quantity")
         if df['price'].iloc[0] <= 0:
             raise ValueError("Invalid price")
         
-        # Write Parquet
+        # Convert to Parquet
         buffer = BytesIO()
         df.to_parquet(buffer, index=False, engine='pyarrow')
         
-        #Generate output key
+        # Generate output key
         new_key = key.replace('raw/', 'processed/').replace('.json', '.parquet')
         
         # Write to S3
@@ -63,9 +65,12 @@ def lambda_handler(event, context):
                 'output_key': new_key
             })
         }
+        
     except Exception as e:
         print(f"Error: {str(e)}")
-        return{
+        import traceback
+        print(traceback.format_exc())
+        return {
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
