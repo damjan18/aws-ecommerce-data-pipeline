@@ -143,8 +143,6 @@ Create role `ecommerce-lambda-role` with policies:
 - Select database: `ecommerce_db`
 - Run sample queries
 
-[Detailed setup guide](docs/setup-guide.md)
-
 ### Local Testing
 
 ```bash
