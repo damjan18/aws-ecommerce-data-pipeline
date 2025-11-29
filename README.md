@@ -98,7 +98,7 @@ Real-time monitoring of pipeline health and performance
 
 Configured CloudWatch Alarms to monitor pipeline health:
 
-![CloudWatch Alarms](images/cloudwatch-alarms.png)
+![CloudWatchAlarms](images/cloudwatch-alarms.png)
 
 **Alerts Configured:**
 
