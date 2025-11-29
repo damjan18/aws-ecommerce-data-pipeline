@@ -98,13 +98,15 @@ Real-time monitoring of pipeline health and performance
 
 Configured CloudWatch Alarms to monitor pipeline health:
 
-![CloudWatchAlarms](images/cloudwatch-alarms.png)
+![CloudWatchAlarms](images/function-alarms.png)
 
 **Alerts Configured:**
 
 - Lambda function failures (both Generator and Transformer)
 - Notifications sent via SNS to email
 - Triggers when error count > 0 in 5-minute window
+
+![emailAlert](images/email-alert-success.png)
 
 **Error Handling Strategy:**
 
