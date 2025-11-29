@@ -76,6 +76,45 @@ A fully serverless ETL data pipeline built on AWS that simulates an e-commerce t
 
 ---
 
+## Pipeline Monitoring
+
+### CloudWatch Dashboard
+
+Real-time monitoring of pipeline health and performance
+
+**Metrics Tracked:**
+
+- Lambda invocations (both functions)
+- Lambda error rates
+- Average execution duration
+- S3 storage utilization
+- S3 API request volume
+
+![Dashboard](images/cloudwatch-dashboard.png)
+
+## Alerting & Error Handling
+
+### SNS Alerts
+
+Configured CloudWatch Alarms to monitor pipeline health:
+
+![CloudWatch Alarms](images/cloudwatch-alarms.png)
+
+**Alerts Configured:**
+
+- Lambda function failures (both Generator and Transformer)
+- Notifications sent via SNS to email
+- Triggers when error count > 0 in 5-minute window
+
+**Error Handling Strategy:**
+
+- Try-catch blocks in all Lambda functions
+- Detailed logging to CloudWatch Logs
+- Automatic retries for transient failures
+- SNS notifications for manual intervention
+
+---
+
 ## Setup Instructions
 
 ### Prerequisites
